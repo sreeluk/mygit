@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: true
+  remote_user: ansible
+  gather_facts: true
+  tasks:
+  - name: copy repo file from local server to remote managed node.
+    copy:
+     src: /etc/yum.repos.d/rhel82.repo
+     dest: /etc/yum.repos.d/rhel82.repo
+     mode: 0644
+     owner: root
+     group: root
+  - name: install apache server
+    yum:
+     name: httpd
+     #state: latest
+     state: installed
+  - name: copy the index file
+    copy:
+     src: /home/ansible/index.html
+     dest: /var/www/html/index.html
+     mode: 0644
+     owner: root
+     group: root
+  - name: Add http port to firewall
+    firewalld:
+     service: http
+     state: enabled
+     permanent: yes
+     immediate: yes
+  - name: start httpd service
+    service:
+     name: httpd
+     state: started
+     enabled: yes
+...
+

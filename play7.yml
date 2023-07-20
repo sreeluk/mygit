@@ -1,0 +1,17 @@
+---
+- name: play to install multiple packages
+  hosts: 
+   - 192.168.29.200
+   - 192.168.30.200
+  become: true
+  remote_user: ansible
+  tasks:
+   - name: Task to install multipe packages
+     yum:
+      name:
+       - mysql
+       - httpd
+       - samba
+       - nfs-utils
+      state: latest
+...
