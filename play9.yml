@@ -1,0 +1,47 @@
+---
+#create user charlie with secondary group devops for all the servers that belong to devteam
+#create user benny with secondary group atom for all the servers that belong to qateam
+#create  user sierra with secondary group leftshift for all the servers belongs to nature group
+- name: play to create users based on the group
+  hosts: [devteam, qateam, uatteam]
+  become: true
+  remote_user: ansible
+  gather_facts: false
+  tasks:
+   - name: create group for devteam1
+     group:
+      name: devops22
+      state: present
+     when: ansible_hostname in groups['devteam']
+   - name: create group for qa team1
+     group:
+      name: atom22
+      state: present
+     when: ansible_hostname in groups['qateam']
+   - name: create group for uatteam1
+     group:
+      name: leftshift22
+      state: present
+     when: ansible_hostname in groups['uatteam']  
+   - name: create user for devteam1
+     user: 
+      name: charlie22
+      groups: devops22
+      password: charlie22|password_hash('sha512')
+      state: present     
+     when: ansible_facts.ansible_default_ipv4.address in groups['devteam']
+   - name: create users for qateam
+     user: 
+      name: benny22
+      groups: atom22
+      password: benny22|password_hash('sha512')
+      state: present     
+     when: ansible_facts.ansible_default_ipv4.address in groups['qateam']
+   - name: create users for uatteam
+     user: 
+      name: sierra22
+      groups: leftshift22
+      password: sierra22|password_hash('sha512')
+      state: present     
+     when: ansible_facts.ansible_default_ipv4.address in groups['uatteam']
+...
