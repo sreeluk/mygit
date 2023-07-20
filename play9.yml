@@ -6,7 +6,7 @@
   hosts: [devteam, qateam, uatteam]
   become: true
   remote_user: ansible
-  gather_facts: false
+  gather_facts: true
   tasks:
    - name: create group for devteam1
      group:
